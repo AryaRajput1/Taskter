@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const taskSchema = new mongoose.Schema({
     title: {
@@ -16,7 +16,7 @@ const taskSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["To Do", "In Progress", "Done", "In Review"],
+        enum: ["To Do", "In Progress", "Done"],
         default: "Planning"
     },
     priority: {
@@ -41,11 +41,7 @@ const taskSchema = new mongoose.Schema({
         max: 100,
         default: 0
     },
-    tasks: {
-        type: Schema.Types.ObjectId,
-        ref: 'Task'
-    },
-    assigniees: [
+    assignees: [
         {
             type: Schema.Types.ObjectId,
             ref: 'User'
@@ -55,8 +51,7 @@ const taskSchema = new mongoose.Schema({
             type: Schema.Types.ObjectId,
             ref: 'User'
         }],
-    tags: [String],
-    subtasks: [{
+    subTasks: [{
         type: Schema.Types.ObjectId,
         ref: 'Task'
     }],
