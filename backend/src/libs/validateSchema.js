@@ -1,0 +1,47 @@
+import z from "zod";
+import { PROJECT_STATUS, ROLES } from "../utils/constant.js";
+
+export const registerSchema = z.object({
+    fullName: z.string().min(3, 'Name is required'),
+    email: z.string().email('Invalid email address'),
+    password: z.string().min(6, 'Password should be of 6 length'),
+    confirmPassword: z.string().min(6, 'Password should be of 6 length')
+})
+
+export const loginSchema = z.object({
+    email: z.string().email('Invalid email address'),
+    password: z.string().min(6, 'Password should be of 6 length')
+})
+
+export const verifyEmailSchema = z.object({
+    token: z.string().min(1, 'Token is required'),
+})
+
+export const forgetPasswordSchema = z.object({
+    email: z.string().email('Invalid email address'),
+})
+
+export const resetPasswordSchema = z.object({
+    token: z.string().min(1, 'Invalid token'),
+    newPassword: z.string().min(6, 'Password should be of 6 length'),
+    confirmPassword: z.string().min(6, 'Password should be of 6 length')
+})
+
+export const workspaceSchema = z.object({
+    name: z.string().min(3, 'name must be atleast 3 char long'),
+    description: z.string().optional(),
+    color: z.string().min(3, 'color must be atleast 3 char long')
+})
+
+export const projectSchema = z.object({
+    title: z.string().min(3, "Title should be atleast of 3 char long"),
+    description: z.string().optional(),
+    status: z.enum(Object.values(PROJECT_STATUS)),
+    startDate: z.string().min(10, "Start Date is mandatory"),
+    dueDate: z.string().min(10, "Start Date is mandatory"),
+    members: z.array(z.object({
+        user: z.string(),
+        role: z.enum(Object.values(ROLES))
+    })).optional(),
+    tags: z.string().optional()
+})
