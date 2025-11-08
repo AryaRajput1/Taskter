@@ -95,7 +95,7 @@ export const TaskCard = ({ task, onClick }: TaskCardProps) => {
                                         title={member.fullName}
                                     >
                                         <AvatarImage src={member.profilePicture} />
-                                        <AvatarFallback>{member.fullName.charAt(0)}</AvatarFallback>
+                                        <AvatarFallback>{member.fullName?.charAt(0)}</AvatarFallback>
                                     </Avatar>
                                 ))}
 

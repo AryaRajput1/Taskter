@@ -47,6 +47,7 @@ export const createTask = async (req, res) => {
 
 
         project.tasks.push(task)
+        task.populate("assignees", "fullName profilePic")
 
         await project.save()
 
