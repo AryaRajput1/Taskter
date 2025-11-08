@@ -256,8 +256,6 @@ export const CreateTaskDialog = ({ isOpen, projectMembers, onOpenChange, project
                                         <div className="grid grid-cols-1">
                                             {
                                                 projectMembers?.map(pm => {
-
-                                                    console.log('uuuuuu', pm.user._id)
                                                     const selectedMember = field.value?.find(mem => mem === pm.user._id)
                                                     return (
                                                         <div key={pm._id} className="flex justify-between gap-3 items-center">
@@ -266,7 +264,6 @@ export const CreateTaskDialog = ({ isOpen, projectMembers, onOpenChange, project
                                                                     !!selectedMember
                                                                 }
                                                                     onCheckedChange={(checked) => {
-                                                                        console.log(checked)
                                                                         if (checked) {
                                                                             field.onChange([...selectedMembers, pm.user._id
                                                                             ])

@@ -37,7 +37,6 @@ const resetPassword = () => {
     })
 
     function onSubmit(values: ResetPasswordFormType) {
-        console.log('ehllo')
         mutate({
             ...values,
             token,

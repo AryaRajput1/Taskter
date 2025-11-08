@@ -29,7 +29,6 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
     const isPublicRoute = PUBLIC_ROUTES.includes(currentPath)
 
-    console.log(currentPath)
     const [user, setUser] = useState<User | null>(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
