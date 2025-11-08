@@ -1,4 +1,4 @@
-import type { PROJECT_STATUS, ROLES } from "utils/constant"
+import type { PROJECT_STATUS, ROLES, TASK_PRIORITY, TASK_STATUS } from "utils/constant"
 
 export interface User {
     _id: string
@@ -21,11 +21,11 @@ export interface Member {
 
 export interface Workspace {
     _id: string
-    name: string,
+    name: string
     description: string
     owner: User | null
     color: string
-    members: Member[],
+    members: Member[]
     createdAt: Date
     updatedAt: Date
 
@@ -33,19 +33,22 @@ export interface Workspace {
 
 export type ProjectStatus = typeof PROJECT_STATUS[keyof typeof PROJECT_STATUS]
 
+export type TaskStatus = typeof TASK_STATUS[keyof typeof TASK_STATUS]
+export type TaskPriority = typeof TASK_PRIORITY[keyof typeof TASK_PRIORITY]
+
 export interface Project {
-    _id: string,
-    title: string,
-    description: string,
+    _id: string
+    title: string
+    description: string
     workspace: Workspace
-    status: ProjectStatus,
-    startDate: Date,
-    dueDate: Date,
+    status: ProjectStatus
+    startDate: Date
+    dueDate: Date
     progress: number
-    tasks: unknown[]
-    members: Member[],
-    tags: String[],
-    isArchieved: boolean,
+    tasks: Task[]
+    members: Member[]
+    tags: String[]
+    isArchieved: boolean
     createdBy: string
 }
 
@@ -57,4 +60,26 @@ export interface Attachment {
     uploadedBy: string;
     uploadedAt: Date;
     _id: string;
+}
+
+export interface Task {
+    _id: string
+    title: string
+    description: string
+    project: Project
+    status: TaskStatus
+    priority: TaskPriority
+    startDate: Date
+    dueDate: Date
+    compltedAt: Date
+    estimatedHours: number
+    actualHours: number
+    progress: number
+    subTasks: Task[]
+    assignees: User[]
+    watchers: User[]
+    isArchieved: boolean
+    attachments: Attachment[]
+    createdBy: string
+    // comments: Comment[]
 }

@@ -1,4 +1,5 @@
-import type { ProjectStatus } from "@/types";
+import type { ProjectStatus, Task } from "@/types";
+import { TASK_STATUS } from "utils/constant";
 
 export const PUBLIC_ROUTES = ["sign-in", "sign-up", "verify-email", "reset-password", "forgot-password", ""]
 
@@ -17,4 +18,12 @@ export const getStatusColor = (status: ProjectStatus) => {
         default:
             return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300";
     }
+}
+
+export const getProjectProgress = (tasks: Task[]) => {
+    const totalTasks = tasks.length
+
+    const completedTasks = tasks.map(task => task.status === TASK_STATUS.DONE).length
+
+    return totalTasks > 0 ? Math.round(completedTasks / totalTasks) : 0
 }

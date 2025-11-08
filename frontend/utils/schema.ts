@@ -1,6 +1,6 @@
 
 import { z } from "zod"
-import { PROJECT_STATUS, ROLES } from "./constant"
+import { PROJECT_STATUS, ROLES, TASK_PRIORITY, TASK_STATUS } from "./constant"
 
 export const loginSchema = z.object({
     email: z.email('Invalid email address'),
@@ -47,6 +47,17 @@ export const projectCreationSchema = z.object({
         role: z.enum(Object.values(ROLES))
     })).optional(),
     tags: z.string().optional()
+})
+
+
+export const taskCreationSchema = z.object({
+    title: z.string().min(3, "Title should be atleast of 3 char long"),
+    description: z.string().optional(),
+    status: z.enum(Object.values(TASK_STATUS)),
+    priority: z.enum(Object.values(TASK_PRIORITY)),
+    startDate: z.string().min(10, "Start Date is mandatory"),
+    dueDate: z.string().min(10, "Start Date is mandatory"),
+    assignees: z.array(z.string()).min(1, "At least 1 assignee is required")
 })
 
 

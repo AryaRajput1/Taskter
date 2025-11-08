@@ -1,6 +1,6 @@
 import type { CreatePorjectFormData } from "@/components/workspace/project/createProjectDialog";
-import { postData } from "@/lib/service";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { getData, postData } from "@/lib/service";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useProjectCreationMutation = () => {
     const queryClient = useQueryClient()
@@ -18,5 +18,12 @@ export const useProjectCreationMutation = () => {
                 queryKey: ['workspaces', (data as { workspaceId: string }).workspaceId]
             })
         }
+    })
+}
+
+export const useProjectTaskQuery = <K>(projectId: string) => {
+    return useQuery({
+        queryKey: ["project", projectId],
+        queryFn: async () => getData<K>(`/projects/${projectId}/tasks`)
     })
 }
