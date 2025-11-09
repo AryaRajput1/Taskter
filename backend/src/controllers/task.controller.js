@@ -104,7 +104,7 @@ export const updateTask = async (req, res) => {
 
         const task = await Task.findById(taskId)
 
-        const { title, description } = req.body
+        const { title, description, status, assignees, priority } = req.body
 
         if (!task) {
             return res.status(404).json({
@@ -130,7 +130,7 @@ export const updateTask = async (req, res) => {
 
         }
 
-        if (title.trim()) {
+        if (title?.trim()) {
             const oldTitle = task.title.substring(0, 50) + task.title.length > 50 ? '...' : ''
             task.title = title.trim();
             await task.save()
@@ -138,12 +138,36 @@ export const updateTask = async (req, res) => {
             await recordActivity(user._id, ACTIVITY_ACTION.UPDATED_TASK, ACTIVITY_RESOURCE_TYPE.TASK, taskId, { description: `updated task title from ${oldTitle} to ${newTitle}` })
         }
 
-        if (description.trim()) {
+        if (description?.trim()) {
             const oldDescription = task.description.substring(0, 50) + task.description.length > 50 ? '...' : ''
             task.description = description.trim();
             await task.save()
             const newDescription = task.description.substring(0, 50) + task.description.length > 50 ? '...' : ''
             await recordActivity(user._id, ACTIVITY_ACTION.UPDATED_TASK, ACTIVITY_RESOURCE_TYPE.TASK, taskId, { description: `updated task description from ${oldDescription} to ${newDescription}` })
+        }
+
+        if (status?.trim()) {
+            const oldStatus = task.status
+            task.status = status;
+            await task.save()
+            const newStatus = task.status
+            await recordActivity(user._id, ACTIVITY_ACTION.UPDATED_TASK, ACTIVITY_RESOURCE_TYPE.TASK, taskId, { description: `updated task status from ${oldStatus} to ${newStatus}` })
+        }
+
+        if (priority?.trim()) {
+            const oldPriority = task.priority
+            task.priority = priority;
+            await task.save()
+            const newPriority = task.priority
+            await recordActivity(user._id, ACTIVITY_ACTION.UPDATED_TASK, ACTIVITY_RESOURCE_TYPE.TASK, taskId, { description: `updated task priority from ${oldPriority} to ${newPriority}` })
+        }
+
+        if (assignees) {
+            const oldAssignees = task.assignees
+            task.assignees = assignees;
+            await task.save()
+            const newAssignees = task.assignees
+            await recordActivity(user._id, ACTIVITY_ACTION.UPDATED_TASK, ACTIVITY_RESOURCE_TYPE.TASK, taskId, { description: `updated task assignees from ${oldAssignees.length} to ${newAssignees.length}` })
         }
 
         return res.status(200).json({

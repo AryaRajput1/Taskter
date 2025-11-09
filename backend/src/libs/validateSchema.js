@@ -1,4 +1,4 @@
-import z from "zod";
+import z, { optional } from "zod";
 import { PROJECT_STATUS, ROLES, TASK_PRIORITY, TASK_STATUS } from "../utils/constant.js";
 
 export const registerSchema = z.object({
@@ -58,4 +58,8 @@ export const taskSchema = z.object({
 
 export const taskUpdateSchema = z.object({
     title: z.string().optional(),
+    description: z.string().optional(),
+    status: z.enum(Object.values(TASK_STATUS)).optional(),
+    assignees: z.array(z.string()).optional(),
+    priority: z.enum(Object.values(TASK_PRIORITY)).optional(),
 })
