@@ -83,6 +83,7 @@ export interface Task {
     createdBy: string
     createdAt: string
     updatedAt: string
+    isWatching?: boolean
     // comments: Comment[]
 }
 
@@ -101,3 +102,10 @@ export interface Activity {
 export type ActivityAction = typeof ACTIVITY_ACTION[keyof typeof ACTIVITY_ACTION]
 
 export type ActivityResourceType = typeof ACTIVITY_RESOURCE_TYPE[keyof typeof ACTIVITY_RESOURCE_TYPE]
+
+export interface Comment {
+    _id: string
+    text: string
+    author: User
+    createdAt: string
+}

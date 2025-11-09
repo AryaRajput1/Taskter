@@ -74,6 +74,7 @@ export const getTask = async (req, res) => {
         const { taskId } = req.params;
 
         const task = await Task.findById(taskId)
+            .populate("comments")
             .populate("assignees", "fullName profilePicture")
             .populate("watchers", "fullName profilePicture");
 
@@ -104,7 +105,7 @@ export const updateTask = async (req, res) => {
 
         const task = await Task.findById(taskId)
 
-        const { title, description, status, assignees, priority } = req.body
+        const { title, description, status, assignees, priority, isWatching, isArchived } = req.body
 
         if (!task) {
             return res.status(404).json({
@@ -169,6 +170,23 @@ export const updateTask = async (req, res) => {
             const newAssignees = task.assignees
             await recordActivity(user._id, ACTIVITY_ACTION.UPDATED_TASK, ACTIVITY_RESOURCE_TYPE.TASK, taskId, { description: `updated task assignees from ${oldAssignees.length} to ${newAssignees.length}` })
         }
+
+        if (isWatching !== undefined && isWatching !== null) {
+            if (isWatching) {
+                task.watchers = [...task.watchers, req.user._id]
+            } else {
+                task.watchers = task.watchers.filter(watcher => watcher.toHexString() !== req.user._id.toHexString())
+            }
+            await task.save()
+            await recordActivity(user._id, ACTIVITY_ACTION.UPDATED_TASK, ACTIVITY_RESOURCE_TYPE.TASK, taskId, { description: `updated task from ${isWatching ? 'not watching' : 'watching'} to ${isWatching ? 'watching' : 'not watching'}` })
+        }
+
+        if (isArchived !== undefined && isArchived !== null) {
+            task.isArchived = isArchived
+            await task.save()
+            await recordActivity(user._id, ACTIVITY_ACTION.UPDATED_TASK, ACTIVITY_RESOURCE_TYPE.TASK, taskId, { description: `updated task from ${isArchived ? 'not archived' : 'archived'} to ${isWatching ? 'archived' : 'not archived'}` })
+        }
+
 
         return res.status(200).json({
             message: "Task updated successfully",

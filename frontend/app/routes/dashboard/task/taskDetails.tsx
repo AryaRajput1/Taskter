@@ -2,6 +2,7 @@ import { BackButton } from "@/components/backButton";
 import Loader from "@/components/Loader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CommentSection } from "@/components/workspace/task/commentSection";
 import { SubTasksDetails } from "@/components/workspace/task/subTaskDetails";
 import { TaskActivity } from "@/components/workspace/task/taskActivity";
 import { TaskAssigneesSelector } from "@/components/workspace/task/taskAssigneesSelector";
@@ -10,12 +11,14 @@ import { TaskPrioritySelector } from "@/components/workspace/task/taskPrioritySe
 import { TaskStatusSelector } from "@/components/workspace/task/taskStatusSelector";
 import { TaskTitle } from "@/components/workspace/task/taskTitle";
 import { Watchers } from "@/components/workspace/task/watchers";
-import { useTaskByIdQuery } from "@/hooks/useTask";
+import { useTaskByIdQuery, useTaskUpdateMutation } from "@/hooks/useTask";
 import { useAuth } from "@/provider/authContextProvider";
 import type { Project, Task, User } from "@/types";
 import { formatDistanceToNow } from "date-fns";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
+import { isAborted } from "zod/v3";
 
 const TaskDetails = () => {
     const { user } = useAuth();
@@ -25,6 +28,7 @@ const TaskDetails = () => {
         workspaceId: string;
     }>();
     const navigate = useNavigate();
+    const { mutate, isPending } = useTaskUpdateMutation()
 
     const { data, isLoading } = useTaskByIdQuery(taskId!) as {
         data: {
@@ -57,6 +61,19 @@ const TaskDetails = () => {
 
     const goBack = () => navigate(-1);
 
+    const updateTask = (data: { isWatching?: boolean; isArchived?: boolean }) => {
+        mutate({
+            taskId: taskId || '', data
+        }, {
+            onSuccess: () => {
+                toast.success("Task updated successfully")
+            },
+            onError: () => {
+                toast.error("Something went wrong")
+            }
+        })
+    }
+
     const members = task?.assignees || [];
     return (
         <div className="container mx-auto p-0 py-4 md:px-4">
@@ -77,7 +94,7 @@ const TaskDetails = () => {
                     <Button
                         variant={"outline"}
                         size="sm"
-                        onClick={() => { }}
+                        onClick={() => { updateTask({ isWatching: !isUserWatching }) }}
                         className="w-fit"
                         disabled={false}
                     >
@@ -97,7 +114,7 @@ const TaskDetails = () => {
                     <Button
                         variant={"outline"}
                         size="sm"
-                        onClick={() => { }}
+                        onClick={() => { updateTask({ isArchived: !task.isArchived }) }}
                         className="w-fit"
                         disabled={false}
                     >
@@ -163,6 +180,7 @@ const TaskDetails = () => {
 
                         <SubTasksDetails subTasks={task.subTasks || []} taskId={task._id} projectMembers={project.members} />
                     </div>
+                    <CommentSection members={project.members} taskId={task._id} />
                 </div>
                 <div className="lg:flex-1">
                     <Watchers watchers={task.watchers || []} />
