@@ -39,6 +39,16 @@ export const useTaskUpdateMutation = () => {
             queryClient.invalidateQueries({
                 queryKey: ['task', (data as { taskId: string }).taskId]
             })
+            queryClient.invalidateQueries({
+                queryKey: ["task-activity", (data as { taskId: string }).taskId]
+            })
         }
+    })
+}
+
+export const useTaskActivityQuery = <T>(resourceId: string) => {
+    return useQuery({
+        queryKey: ["task-activity", resourceId],
+        queryFn: () => getData<T>(`activities/${resourceId}/Task`)
     })
 }

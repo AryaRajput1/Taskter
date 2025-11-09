@@ -1,4 +1,4 @@
-import type { PROJECT_STATUS, ROLES, TASK_PRIORITY, TASK_STATUS } from "utils/constant"
+import type { ACTIVITY_ACTION, ACTIVITY_RESOURCE_TYPE, PROJECT_STATUS, ROLES, TASK_PRIORITY, TASK_STATUS } from "utils/constant"
 
 export interface User {
     _id: string
@@ -85,3 +85,19 @@ export interface Task {
     updatedAt: string
     // comments: Comment[]
 }
+
+export interface Activity {
+    _id: string
+    user: User
+    action: ActivityAction
+    resourceId: string
+    resourceType: ActivityResourceType
+    details: {
+        description: string
+    }
+    createdAt: string
+}
+
+export type ActivityAction = typeof ACTIVITY_ACTION[keyof typeof ACTIVITY_ACTION]
+
+export type ActivityResourceType = typeof ACTIVITY_RESOURCE_TYPE[keyof typeof ACTIVITY_RESOURCE_TYPE]
