@@ -34,7 +34,7 @@ const ProjectDetails = () => {
 
 
     const handleTaskClick = (taskId: string) => {
-        navigate(`workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}`)
+        navigate(`/workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}`)
     }
 
     return (

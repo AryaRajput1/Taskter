@@ -48,7 +48,7 @@ export interface Project {
     tasks: Task[]
     members: Member[]
     tags: String[]
-    isArchieved: boolean
+    isArchived: boolean
     createdBy: string
 }
 
@@ -78,7 +78,7 @@ export interface Task {
     subTasks: Task[]
     assignees: User[]
     watchers: User[]
-    isArchieved: boolean
+    isArchived: boolean
     attachments: Attachment[]
     createdBy: string
     // comments: Comment[]

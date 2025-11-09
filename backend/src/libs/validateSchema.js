@@ -55,3 +55,7 @@ export const taskSchema = z.object({
     dueDate: z.string().min(10, "Start Date is mandatory"),
     assignees: z.array(z.string()).min(1, "At least 1 assignee is required")
 })
+
+export const taskUpdateSchema = z.object({
+    title: z.string().optional(),
+})

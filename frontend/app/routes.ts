@@ -14,7 +14,8 @@ export default [
         route('/dashboard', "routes/dashboard/index.tsx"),
         route('/workspaces', "routes/dashboard/workspace/index.tsx"),
         route('/workspaces/:workspaceId', "routes/dashboard/workspace/workspaceDetails.tsx"),
-        route('/workspaces/:workspaceId/projects/:projectId', "routes/dashboard/project/projectDetails.tsx")
+        route('/workspaces/:workspaceId/projects/:projectId', "routes/dashboard/project/projectDetails.tsx"),
+        route('/workspaces/:workspaceId/projects/:projectId/tasks/:taskId', "routes/dashboard/task/taskDetails.tsx")
 
     ])
 ] satisfies RouteConfig;

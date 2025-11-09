@@ -17,8 +17,8 @@ export const NAV_ITEMS = [{
     href: '/members',
     icon: Users
 }, {
-    title: 'Archieved',
-    href: '/archieved',
+    title: 'Archived',
+    href: '/archived',
     icon: CheckCircle2
 }, {
     title: 'Settings',
