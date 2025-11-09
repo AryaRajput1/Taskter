@@ -1,6 +1,8 @@
+import { recordActivity } from "../libs/index.js";
 import { Project } from "../models/project.model.js";
 import { Task } from "../models/task.model.js";
 import { Workspace } from "../models/workspace.model.js";
+import { ACTIVITY_ACTION, ACTIVITY_RESOURCE_TYPE } from "../utils/constant.js";
 
 export const createTask = async (req, res) => {
     try {
@@ -102,7 +104,7 @@ export const updateTask = async (req, res) => {
 
         const task = await Task.findById(taskId)
 
-        const { title } = req.body
+        const { title, description } = req.body
 
         if (!task) {
             return res.status(404).json({
@@ -129,8 +131,19 @@ export const updateTask = async (req, res) => {
         }
 
         if (title.trim()) {
+            const oldTitle = task.title.substring(0, 50) + task.title.length > 50 ? '...' : ''
             task.title = title.trim();
             await task.save()
+            const newTitle = task.title.substring(0, 50) + task.title.length > 50 ? '...' : ''
+            await recordActivity(user._id, ACTIVITY_ACTION.UPDATED_TASK, ACTIVITY_RESOURCE_TYPE.TASK, taskId, { description: `updated task title from ${oldTitle} to ${newTitle}` })
+        }
+
+        if (description.trim()) {
+            const oldDescription = task.description.substring(0, 50) + task.description.length > 50 ? '...' : ''
+            task.description = description.trim();
+            await task.save()
+            const newDescription = task.description.substring(0, 50) + task.description.length > 50 ? '...' : ''
+            await recordActivity(user._id, ACTIVITY_ACTION.UPDATED_TASK, ACTIVITY_RESOURCE_TYPE.TASK, taskId, { description: `updated task description from ${oldDescription} to ${newDescription}` })
         }
 
         return res.status(200).json({
