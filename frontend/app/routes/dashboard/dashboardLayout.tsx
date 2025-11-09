@@ -7,7 +7,7 @@ import { getData } from "@/lib/service"
 import { useAuth } from "@/provider/authContextProvider"
 import type { Workspace } from "@/types"
 import { useState } from "react"
-import { Navigate, Outlet, useLoaderData } from "react-router"
+import { Navigate, Outlet, useLoaderData, useLocation, useNavigate } from "react-router"
 
 export async function clientLoader() {
   try {
@@ -24,6 +24,8 @@ const dashboardLayout = () => {
   const [isWorkspaceCreating, setIsWorkspaceCreating] = useState(false)
   const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(null)
   const { workspaces } = useLoaderData()
+  const navigate = useNavigate()
+  const isOnWorkspacePage = useLocation().pathname.includes("/workspace");
 
   if (isLoading) {
     return <Loader />
@@ -33,7 +35,18 @@ const dashboardLayout = () => {
     return <Navigate to={'/login'} />
   }
 
-  const handleWorkspaceSelected = (workspace: Workspace | null) => setCurrentWorkspace(workspace)
+  const handleWorkspaceSelected = (workspace: Workspace | null) => {
+    setCurrentWorkspace(workspace)
+    const location = window.location;
+
+    if (isOnWorkspacePage) {
+      navigate(`/workspaces/${workspace?._id}`);
+    } else {
+      const basePath = location.pathname;
+
+      navigate(`${basePath}?workspaceId=${workspace?._id}`);
+    }
+  }
 
   return (
     <div className="flex h-screen w-full">

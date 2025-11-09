@@ -109,3 +109,37 @@ export interface Comment {
     author: User
     createdAt: string
 }
+
+export interface TaskTrendsData {
+    name: string;
+    completed: number;
+    inProgress: number;
+    todo: number;
+}
+
+export interface TaskPriorityData {
+    name: string;
+    value: number;
+    color: string;
+}
+
+export interface ProjectStatusData {
+    name: string;
+    value: number;
+    color: string;
+}
+
+export interface WorkspaceProductivityData {
+    name: string;
+    completed: number;
+    total: number;
+}
+
+export interface StatsData {
+    totalProjects: number;
+    totalTasks: number;
+    totalProjectInProgress: number;
+    totalTaskCompleted: number;
+    totalTaskToDo: number;
+    totalTaskInProgress: number;
+}
