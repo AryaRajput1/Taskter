@@ -1,5 +1,5 @@
 import z, { optional } from "zod";
-import { PROJECT_STATUS, ROLES, TASK_PRIORITY, TASK_STATUS } from "../utils/constant.js";
+import { ACTIVITY_ACTION, ACTIVITY_RESOURCE_TYPE, PROJECT_STATUS, ROLES, TASK_PRIORITY, TASK_STATUS } from "../utils/constant.js";
 
 export const registerSchema = z.object({
     fullName: z.string().min(3, 'Name is required'),
@@ -62,4 +62,9 @@ export const taskUpdateSchema = z.object({
     status: z.enum(Object.values(TASK_STATUS)).optional(),
     assignees: z.array(z.string()).optional(),
     priority: z.enum(Object.values(TASK_PRIORITY)).optional(),
+})
+
+export const activitySchema = z.object({
+    resourceType: z.enum(Object.values(ACTIVITY_RESOURCE_TYPE)),
+    resourceId: z.string().min(3, "id should be atleast of 3 char long"),
 })

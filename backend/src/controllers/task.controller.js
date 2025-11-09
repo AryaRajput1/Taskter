@@ -139,10 +139,10 @@ export const updateTask = async (req, res) => {
         }
 
         if (description?.trim()) {
-            const oldDescription = task.description.substring(0, 50) + task.description.length > 50 ? '...' : ''
+            const oldDescription = task.description.substring(0, 50) + (task.description.length > 50 ? '...' : '')
             task.description = description.trim();
             await task.save()
-            const newDescription = task.description.substring(0, 50) + task.description.length > 50 ? '...' : ''
+            const newDescription = task.description.substring(0, 50) + (task.description.length > 50 ? '...' : '')
             await recordActivity(user._id, ACTIVITY_ACTION.UPDATED_TASK, ACTIVITY_RESOURCE_TYPE.TASK, taskId, { description: `updated task description from ${oldDescription} to ${newDescription}` })
         }
 
