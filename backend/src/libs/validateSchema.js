@@ -68,3 +68,7 @@ export const activitySchema = z.object({
     resourceType: z.enum(Object.values(ACTIVITY_RESOURCE_TYPE)),
     resourceId: z.string().min(3, "id should be atleast of 3 char long"),
 })
+
+export const commentSchema = z.object({
+    text: z.string().min(1, "Text should be atleast of 1 char long"),
+})

@@ -4,6 +4,7 @@ import workspaceRoutes from './workspace.route.js'
 import projectRoutes from './project.route.js'
 import taskRoutes from './task.route.js'
 import activityRoutes from './activity.route.js'
+import commentRoutes from './comment.route.js'
 
 const router = new Router()
 
@@ -12,5 +13,6 @@ router.use('/workspaces', workspaceRoutes)
 router.use('/projects', projectRoutes)
 router.use('/tasks', taskRoutes)
 router.use('/activities', activityRoutes)
+router.use('/comments', commentRoutes)
 
 export default router
