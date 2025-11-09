@@ -31,7 +31,7 @@ export const useTaskByIdQuery = (taskId: string) => {
 };
 
 
-export const useUpdateTaskMutation = () => {
+export const useTaskUpdateMutation = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: ({ taskId, data }: { taskId: string, data: Partial<Task> }) => updateData(`/tasks/${taskId}/update`, data),

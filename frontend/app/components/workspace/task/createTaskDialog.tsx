@@ -45,15 +45,17 @@ import { toast } from "sonner"
 import { useTaskCreationMutation } from "@/hooks/useTask"
 
 interface CreateTaskDialogProps {
+    isSubTask?: boolean
     isOpen: boolean
     onOpenChange: (val: boolean) => void
     projectId: string
     projectMembers?: Member[]
+    parentTaskId?: string
 }
 
 export type CreateTaskFormData = z.infer<typeof taskCreationSchema>
 
-export const CreateTaskDialog = ({ isOpen, projectMembers, onOpenChange, projectId }: CreateTaskDialogProps) => {
+export const CreateTaskDialog = ({ isSubTask = false, parentTaskId = undefined, isOpen, projectMembers, onOpenChange, projectId }: CreateTaskDialogProps) => {
 
     const { mutate, isPending } = useTaskCreationMutation()
 

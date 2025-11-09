@@ -1,27 +1,28 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useTaskUpdateMutation } from "@/hooks/useTask";
 import { Edit } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export const TaskTitle = ({
-    title,
+
+export const TaskDescription = ({
+    description,
     taskId,
 }: {
-    title: string;
+    description: string;
     taskId: string;
 }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [newTitle, setNewTitle] = useState(title);
+    const [newDescription, setNewDescription] = useState(description);
     const { mutate, isPending } = useTaskUpdateMutation();
-    const updateTitle = () => {
+    const updateDescription = () => {
         mutate(
-            { taskId, data: { title: newTitle } },
+            { taskId, data: { description: newDescription } },
             {
                 onSuccess: () => {
                     setIsEditing(false);
-                    toast.success("Title updated successfully");
+                    toast.success("Description updated successfully");
                 },
                 onError: (error: any) => {
                     const errorMessage = error.response.data.message;
@@ -35,22 +36,24 @@ export const TaskTitle = ({
     return (
         <div className="flex items-center gap-2">
             {isEditing ? (
-                <Input
-                    className="text-xl! font-semibold w-full min-w-3xl"
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                //   disabled={isPending}
+                <Textarea
+                    className="w-full min-w-3xl"
+                    value={newDescription}
+                    onChange={(e) => setNewDescription(e.target.value)}
+                    disabled={isPending}
                 />
             ) : (
-                <h2 className="text-xl flex-1 font-semibold">{title}</h2>
+                <div className="text-sm md:text-base text-pretty flex-1 text-muted-foreground">
+                    {description}
+                </div>
             )}
 
             {isEditing ? (
                 <Button
                     className="py-0"
                     size="sm"
-                    onClick={updateTitle}
-                //   disabled={isPending}
+                    onClick={updateDescription}
+                    disabled={isPending}
                 >
                     Save
                 </Button>

@@ -76,10 +76,12 @@ export interface Task {
     actualHours: number
     progress: number
     subTasks: Task[]
-    assignees: User[]
+    assignees: User[] | string[]
     watchers: User[]
     isArchived: boolean
     attachments: Attachment[]
     createdBy: string
+    createdAt: string
+    updatedAt: string
     // comments: Comment[]
 }

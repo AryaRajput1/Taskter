@@ -2,10 +2,18 @@ import { BackButton } from "@/components/backButton";
 import Loader from "@/components/Loader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SubTasksDetails } from "@/components/workspace/task/subTaskDetails";
+import { TaskActivity } from "@/components/workspace/task/taskActivity";
+import { TaskAssigneesSelector } from "@/components/workspace/task/taskAssigneesSelector";
+import { TaskDescription } from "@/components/workspace/task/taskDescription";
+import { TaskPrioritySelector } from "@/components/workspace/task/taskPrioritySelector";
+import { TaskStatusSelector } from "@/components/workspace/task/taskStatusSelector";
 import { TaskTitle } from "@/components/workspace/task/taskTitle";
+import { Watchers } from "@/components/workspace/task/watchers";
 import { useTaskByIdQuery } from "@/hooks/useTask";
 import { useAuth } from "@/provider/authContextProvider";
-import type { Project, Task } from "@/types";
+import type { Project, Task, User } from "@/types";
+import { formatDistanceToNow } from "date-fns";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 
@@ -53,7 +61,7 @@ const TaskDetails = () => {
     return (
         <div className="container mx-auto p-0 py-4 md:px-4">
             <div className="flex flex-col md:flex-row items-center justify-between mb-6">
-                <div className="flex flex-col md:flex-row md:items-center gap-4">
+                <div className="flex flex-col md:flex-row md:items-center gap-6">
                     <BackButton />
 
                     <h1 className="text-xl md:text-2xl font-bold">{task.title}</h1>
@@ -98,7 +106,7 @@ const TaskDetails = () => {
                 </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-6">
-                <div className="lg:col-span-2">
+                <div className="lg:flex-2">
                     <div className="bg-card rounded-lg p-6 shadow-sm mb-6">
                         <div className="flex flex-col md:flex-row justify-between items-start mb-4">
                             <div>
@@ -115,9 +123,51 @@ const TaskDetails = () => {
                                     {task.priority} Priority
                                 </Badge>
                                 <TaskTitle title={task.title} taskId={task._id} />
+                                <div className="text-sm md:text-base text-muted-foreground">
+                                    Created at:{" "}
+                                    {formatDistanceToNow(new Date(task.createdAt), {
+                                        addSuffix: true,
+                                    })}
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2 mt-4 md:mt-0">
+                                <TaskStatusSelector status={task.status} taskId={task._id} />
+
+                                <Button
+                                    variant={"destructive"}
+                                    size="sm"
+                                    onClick={() => { }}
+                                    className="hidden md:block"
+                                >
+                                    Delete Task
+                                </Button>
                             </div>
                         </div>
+                        <div className="mb-6">
+                            <h3 className="text-sm font-medium text-muted-foreground mb-0">
+                                Description
+                            </h3>
+
+                            <TaskDescription
+                                description={task.description || ""}
+                                taskId={task._id}
+                            />
+                        </div>
+                        <TaskAssigneesSelector
+                            task={task}
+                            assignees={task.assignees as User[]}
+                            projectMembers={project.members}
+                        />
+
+                        <TaskPrioritySelector priority={task.priority} taskId={task._id} />
+
+                        <SubTasksDetails subTasks={task.subTasks || []} taskId={task._id} projectMembers={project.members} />
                     </div>
+                </div>
+                <div className="lg:flex-1">
+                    <Watchers watchers={task.watchers || []} />
+
+                    <TaskActivity resourceId={task._id} />
                 </div>
             </div>
         </div>
