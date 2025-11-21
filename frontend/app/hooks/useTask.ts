@@ -52,3 +52,10 @@ export const useTaskActivityQuery = <T>(resourceId: string) => {
         queryFn: () => getData<T>(`activities/${resourceId}/Task`)
     })
 }
+
+export const useTaskMyTasksQuery = <T>() => {
+    return useQuery({
+        queryKey: ["my-tasks"],
+        queryFn: () => getData<T>(`tasks`)
+    })
+}

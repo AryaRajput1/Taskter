@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { validateRequest } from 'zod-express-middleware'
 import { authMiddleware } from '../middlewares/auth.middleware.js'
 import { taskSchema, taskUpdateSchema } from '../libs/validateSchema.js'
-import { createTask, getTask, updateTask } from '../controllers/task.controller.js'
+import { createTask, getTask, updateTask, getMyTasks } from '../controllers/task.controller.js'
 
 const router = new Router()
 
@@ -22,6 +22,10 @@ router.put('/:taskId/update',
         body: taskUpdateSchema
     }),
     updateTask)
+
+router.get('/',
+    authMiddleware,
+    getMyTasks)
 
 
 export default router
